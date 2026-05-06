@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人网站</title>
+    <style>
+        /* ========== 全局重置与基础样式 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.6;
+        }
+
+        /* ========== 导航栏（按你给的图片修改样式） ========== */
+        .navbar {
+            position: sticky;
+            top: 20px;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 3px solid #000000;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 10px 20px;
+            z-index: 999;
+        }
+
+        .nav-logo {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #000;
+            border-radius: 50%;
+            margin-right: auto;
+        }
+
+        /* 导航项默认样式 */
+        .nav-item {
+            font-size: 16px;
+            font-weight: 700;
+            color: #555555; /* 默认灰色文字 */
+            padding: 10px 25px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        /* 选中状态：黑色背景+白色文字 */
+        .nav-item.active {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        /* 收藏按钮样式（和参考图一致的黄色按钮） */
+        .nav-contact-btn {
+            background-color: #ffcc00;
+            color: #000;
+            border: 3px solid #000;
+            border-radius: 20px;
+            padding: 10px 25px;
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        /* ========== 内容区域 ========== */
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+
+        /* Tab内容面板 默认隐藏 */
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== 首页Hero部分 ========== */
+        .hero-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            min-height: 500px;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 30px;
+        }
+
+        .highlight-pink {
+            background-color: #ff6b81;
+            color: #fff;
+            padding: 0 10px;
+            display: inline-block;
+        }
+
+        .highlight-blue {
+            background-color: #4dabf7;
+            color: #fff;
+            padding: 0 10px;
+            display: inline-block;
+        }
+
+        .hero-desc {
+            font-size: 18px;
+            color: #444;
+            margin-bottom: 40px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #000;
+            color: #fff;
+            border: 3px solid #000;
+        }
+
+        .btn-secondary {
+            background: #fff;
+            color: #000;
+            border: 3px solid #000;
+        }
+
+        .hero-illustration {
+            width: 100%;
+            height: 400px;
+            background: #ffc107;
+            border-radius: 20px;
+            border: 3px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 用简单样式模拟参考图中的插画效果 */
+        .illustration-placeholder {
+            width: 80%;
+            height: 80%;
+            background: url('https://picsum.photos/400/400?random=1') center/cover no-repeat;
+            border-radius: 10px;
+        }
+
+        /* ========== 服务/卡片通用样式（文章/作品复用） ========== */
+        .section-title {
+            text-align: center;
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .section-desc {
+            text-align: center;
+            font-size: 18px;
+            color: #444;
+            max-width: 700px;
+            margin: 0 auto 60px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card, .article-card, .work-card {
+            background: #f1f1f1;
+            border: 3px solid #000;
+            border-radius: 20px;
+            overflow: hidden;
+            padding-bottom: 30px;
+        }
+
+        .card-icon {
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f1f1;
+        }
+
+        .icon-placeholder {
+            width: 80%;
+            height: 80%;
+            background: url('https://picsum.photos/300/200?random=') center/cover no-repeat;
+            border-radius: 10px;
+        }
+
+        .card-content {
+            padding: 0 25px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 20px 0 15px;
+        }
+
+        .card-desc {
+            font-size: 16px;
+            color: #444;
+            line-height: 1.7;
+        }
+
+        /* ========== 关于我部分 ========== */
+        .about-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-illustration {
+            width: 400px;
+            height: 400px;
+            background: #ff6b81;
+            border-radius: 50%;
+            border: 3px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .about-illustration .illustration-placeholder {
+            width: 70%;
+            height: 70%;
+            border-radius: 50%;
+        }
+
+        .about-title {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .about-desc {
+            font-size: 18px;
+            color: #444;
+            margin-bottom: 30px;
+        }
+
+        .about-list {
+            list-style: none;
+            margin-bottom: 40px;
+        }
+
+        .about-list li {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .list-icon {
+            width: 25px;
+            height: 25px;
+            border-radius: 5px;
+        }
+
+        .icon-blue { background: #4dabf7; }
+        .icon-pink { background: #ff6b81; }
+
+        /* ========== 响应式适配 ========== */
+        @media (max-width: 992px) {
+            .hero-section, .about-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-title {
+                font-size: 40px;
+            }
+
+            .about-title {
+                font-size: 36px;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .about-list li {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .nav-item {
+                font-size: 18px;
+                padding: 8px 15px;
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏（按你给的图片修改） -->
+    <nav class="navbar">
+        <div class="nav-logo"></div>
+        <div class="nav-item active" data-tab="home">首页</div>
+        <div class="nav-item" data-tab="about">关于我</div>
+        <div class="nav-item" data-tab="articles">我的文章</div>
+        <div class="nav-item" data-tab="works">我的作品</div>
+        <button class="nav-contact-btn">📌 收藏(0)</button>
+    </nav>
+
+    <!-- 内容区域 -->
+    <div class="content-wrapper">
+        <!-- 首页 -->
+        <div class="tab-panel active" id="home">
+            <!-- Hero部分 -->
+            <div class="hero-section">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        I'm <span class="highlight-pink">你的麦麦</span>,<br>
+                        a 前端开发者<br>
+                        from <span class="highlight-blue">中国</span>
+                    </h1>
+                    <p class="hero-desc">
+                        热爱用代码和设计创造美好体验，专注于打造简洁、高效、有温度的数字产品。
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary">✉️ Get in touch</button>
+                        <button class="btn btn-secondary">📁 View portfolio</button>
+                    </div>
+                </div>
+                <div class="hero-illustration">
+                    <div class="illustration-placeholder"></div>
+                </div>
+            </div>
+
+            <!-- 服务/技能部分（和参考图服务卡片风格一致） -->
+            <div class="services-section" style="margin-top: 100px;">
+                <h2 class="section-title">My broad <span class="highlight-pink">set of skills</span></h2>
+                <p class="section-desc">
+                    从设计到开发，我能为你提供完整的数字产品解决方案
+                </p>
+                <div class="card-grid">
+                    <div class="service-card">
+                        <div class="card-icon">
+                            <div class="icon-placeholder" style="background-image: url('https://picsum.photos/300/200?random=2');"></div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Web design</h3>
+                            <p class="card-desc">
+                                从用户需求出发，打造简洁、美观、高可用性的网站界面设计
+                            </p>
+                        </div>
+                    </div>
+                    <div class="service-card">
+                        <div class="card-icon">
+                            <div class="icon-placeholder" style="background-image: url('https://picsum.photos/300/200?random=3');"></div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">UI/UX design</h3>
+                            <p class="card-desc">
+                                以用户为中心，设计流畅、直观、有温度的产品交互体验
+                            </p>
+                        </div>
+                    </div>
+                    <div class="service-card">
+                        <div class="card-icon">
+                            <div class="icon-placeholder" style="background-image: url('https://picsum.photos/300/200?random=4');"></div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Frontend dev</h3>
+                            <p class="card-desc">
+                                用HTML/CSS/JS实现设计稿，打造响应式、高性能的前端页面
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 关于我 -->
+        <div class="tab-panel" id="about">
+            <div class="about-section">
+                <div class="about-illustration">
+                    <div class="illustration-placeholder" style="background-image: url('https://raw.githubusercontent.com/xiaomai1005/my_portfolio/main/28d2430b613097ca1e0d19636797ab2bef046ca75b538-WgY1hg_fw658webp.webp');"></div>
+                </div>
+                <div class="about-text">
+                    <h2 class="about-title">Who's behind all this <span class="highlight-blue">great work?</span></h2>
+                    <p class="about-desc">
+                        一名热爱前端开发与设计的开发者，擅长将创意转化为可落地的数字产品。
+                    </p>
+                    <ul class="about-list">
+                        <li><span class="list-icon icon-blue"></span> 3+ years of experience</li>
+                        <li><span class="list-icon icon-pink"></span> 50+ successful projects</li>
+                        <li><span class="list-icon icon-blue"></span> 10+ open source contributions</li>
+                    </ul>
+                    <button class="btn btn-primary">👤 More about me</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 我的文章 -->
+        <div class="tab-panel" id="articles">
+            <h2 class="section-title">My latest <span class="highlight-pink">articles</span></h2>
+            <p class="section-desc">
+                分享前端技术、设计思考与个人成长记录
+            </p>
+            <div class="card-grid">
+                <div class="article-card">
+                    <div class="card-icon">
+                        <div class="icon-placeholder" style="background-image: url('https://picsum.photos/300/200?random=6');"></div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">CSS 动画进阶指南</h3>
+                        <p class="card-desc">
+                            从基础过渡到复杂动画，教你用CSS打造丝滑的页面交互效果
+                        </p>
+                    </div>
+                </div>
+                <div class="article-card">
+                    <div class="card-icon">
+                        <div class="icon-placeholder" style="background-image: url('https://picsum.photos/300/200?random=7');"></div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">前端性能优化实战</h3>
+                        <p class="card-desc">
+                            从加载、渲染到交互，全方位提升你的网页性能
+                        </p>
+                    </div>
+                </div>
+                <div class="article-card">
+                    <div class="card-icon">
+                        <div class="icon-placeholder" style="background-image: url('https://picsum.photos/300/200?random=8');"></div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">个人网站搭建全流程</h3>
+                        <p class="card-desc">
+                            从设计到上线，手把手教你打造专属个人作品集网站
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 我的作品 -->
+        <div class="tab-panel" id="works">
+            <h2 class="section-title">My recent <span class="highlight-blue">works</span></h2>
+            <p class="section-desc">
+                精选的个人项目与商业合作作品，涵盖网站、小程序与UI设计
+            </p>
+            <div class="card-grid">
+                <div class="work-card">
+                    <div class="card-icon">
+                        <div class="icon-placeholder" style="background-image: url('https://picsum.photos/300/200?random=9');"></div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">电商网站重构</h3>
+                        <p class="card-desc">
+                            为传统电商平台进行响应式重构，提升用户体验与转化率
+                        </p>
+                    </div>
+                </div>
+                <div class="work-card">
+                    <div class="card-icon">
+                        <div class="icon-placeholder" style="background-image: url('https://picsum.photos/300/200?random=10');"></div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">健身APP UI设计</h3>
+                        <p class="card-desc">
+                            一套简洁现代的健身追踪APP界面设计，包含完整的交互流程
+                        </p>
+                    </div>
+                </div>
+                <div class="work-card">
+                    <div class="card-icon">
+                        <div class="icon-placeholder" style="background-image: url('https://picsum.photos/300/200?random=11');"></div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">个人博客系统</h3>
+                        <p class="card-desc">
+                            基于Vue+Node.js开发的轻量化博客系统，支持Markdown编辑
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab切换功能（保持不变，只是样式更新了）
+        const navItems = document.querySelectorAll('.nav-item');
+        const tabPanels = document.querySelectorAll('.tab-panel');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // 移除所有选中状态
+                navItems.forEach(nav => nav.classList.remove('active'));
+                tabPanels.forEach(panel => panel.classList.remove('active'));
+
+                // 激活当前Tab和内容
+                item.classList.add('active');
+                const tabId = item.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
